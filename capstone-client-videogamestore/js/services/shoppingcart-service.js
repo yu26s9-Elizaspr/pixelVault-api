@@ -88,12 +88,21 @@ class ShoppingCartService {
         h1.innerText = "Cart";
         cartHeader.appendChild(h1);
 
+        const checkoutButton = document.createElement("button");
+        checkoutButton.classList.add("btn");
+        checkoutButton.classList.add("btn-success");
+        checkoutButton.innerText = "Checkout";
+        checkoutButton.addEventListener("click", () => this.checkout());
+
+
         const button = document.createElement("button");
         button.classList.add("btn")
         button.classList.add("btn-danger")
         button.innerText = "Clear";
         button.addEventListener("click", () => this.clearCart());
-        cartHeader.appendChild(button)
+
+        cartHeader.appendChild(button);
+        cartHeader.appendChild(checkoutButton);
 
         contentDiv.appendChild(cartHeader)
         main.appendChild(contentDiv);
@@ -173,6 +182,26 @@ class ShoppingCartService {
              })
     }
 
+    checkout()
+    {
+        const url = `${config.baseUrl}/orders`;
+        const headers = userService.getHeaders();
+
+        axios.post(url, {}, { headers })
+            .then(response => {
+                alert("Order placed successfully!");
+                this.loadCart();
+                this.loadCartPage();
+            })
+            .catch(error => {
+                const data = {
+                    error: "Checkout failed."
+                };
+
+                templateBuilder.append("error", data, "errors");
+            });
+    }
+
     updateCartDisplay()
     {
         try {
@@ -191,6 +220,8 @@ class ShoppingCartService {
 
 
 
+
+
 document.addEventListener('DOMContentLoaded', () => {
     cartService = new ShoppingCartService();
 
@@ -198,5 +229,7 @@ document.addEventListener('DOMContentLoaded', () => {
     {
         cartService.loadCart();
     }
+
+
 
 });

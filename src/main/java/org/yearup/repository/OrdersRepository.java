@@ -1,4 +1,10 @@
 package org.yearup.repository;
 
-public interface OrdersRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import org.yearup.models.Orders;
+
+@Repository
+public interface OrdersRepository extends JpaRepository<Orders, Integer> {
+
 }
